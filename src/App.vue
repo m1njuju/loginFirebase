@@ -19,6 +19,13 @@
             </v-list-item-action>
             <v-list-item-title>로그아웃</v-list-item-title>
           </v-list-item>
+          <!-- 로그인이 된 경우에만 회원탈퇴 버튼을 표시함 -->
+          <v-list-item @click="fnDoDelete" v-if="fnGetAuthStatus">
+            <v-list-item-action>
+              <v-icon>mdi-arrow-right-bold-box</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>회원탈퇴</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
 
@@ -43,6 +50,11 @@
           <v-btn @click="fnDoLogout" text v-if="fnGetAuthStatus">
             <v-icon left>mdi-arrow-right-bold-box-outline</v-icon>
             로그아웃
+          </v-btn>
+          <!-- 로그인 된 경우에만 회원탈퇴 버튼을 표시-->
+          <v-btn @click="fnDoDelete" text v-if="fnGetAuthStatus">
+            <v-icon left>mdi-arrow-right-bold-box</v-icon>
+            회원탈퇴
           </v-btn>
         </v-toolbar-items>
       </v-app-bar>
@@ -72,7 +84,7 @@ export default {
     },
     // 로그인 여부에 따라 다르게 탐색서랍과 툴바메뉴명 항목 배열 반환
     fnGetMenuItems() {
-      if(!this.login) {
+      if(!this.fnGetAuthStatus) {
         return [{
           title: '회원가입',
           to: '/register',
@@ -90,6 +102,9 @@ export default {
   methods: {
     fnDoLogout() {
       this.$store.dispatch('fnDoLogout');
+    },
+    fnDoDelete() {
+      this.$store.dispatch('fnDoDelete');
     }
   }
 }
